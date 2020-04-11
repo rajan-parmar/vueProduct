@@ -43,16 +43,39 @@
                             <th>Product</th>
                             <th>Price</th>
                             <th>Product Image</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
 
                     <tbody>
                         <tr v-for="productList in productLists" :key="productList.id">
                             <td>{{ productList.id }}</td>
-                            <td>{{ productList.product }}</td>
-                            <td>{{ productList.price }}</td>
                             <td>
-                                <img :src="productList.url" width="50px" height="50px">
+                                <input v-model="productList.product"
+                                    v-if="productList.isEdit"
+                                    class="form-control"
+                                    @keyup.enter="productList.isEdit = false;"
+                                >
+                                <label v-else @click="productList.isEdit = true;">{{ productList.product }}</label>
+                            </td>
+
+                            <td>
+                                <input v-model="productList.price"
+                                    v-if="productList.isEdit"
+                                    class="form-control"
+                                    @keyup.enter="productList.isEdit = false;"
+                                >
+                                <label v-else @click="productList.isEdit = true;">{{ productList.price }}</label>
+                            </td>
+
+                            <td>
+                                <input v-model="productList.url" v-if="productList.isEdit" class="form-control"
+                                    @keyup.enter="productList.isEdit = false;">
+                                <img v-else @click="productList.isEdit = true;" :src="productList.url" width="50px" height="50px">
+                            </td>
+
+                            <td>
+                                <button class="btn-sm btn-danger" title="Delete Todo" @click="removeProduct(productList.id)">Delete</button>
                             </td>
                         </tr>
                     </tbody>
@@ -75,13 +98,18 @@
             methods: {
                 addNewProduct() {
                     if (this.product == '' || this.price == '' || this.url == '') {
-                        alert('empty');
+                        alert('Please fill blank field');
                     } else {
-                        this.productLists.push({ id: Math.floor(Math.random() * 10), product: this.product, price: this.price, url: this.url })
+                        this.productLists.push(
+                            { id: Math.floor(Math.random() * 10), product: this.product, price: this.price, url: this.url, isEdit: false }
+                        )
                         this.product = '';
                         this.price = '';
                         this.url = '';
                     }
+                },
+                removeProduct(productId) {
+                    this.productLists = this.productLists.filter(product => product.id !== productId)
                 }
             }
         })
