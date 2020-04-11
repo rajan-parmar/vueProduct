@@ -16,7 +16,7 @@
                 <form @submit.prevent="addNewProduct">
                     <div class="form-group">
                         <label class="font-weight-bold">Product:</label>
-                        <input type="text" class="form-control" placeholder="Insert Product" v-model="product" />
+                        <input type="text" class="form-control" placeholder="Insert Product" v-model="name" />
                     </div>
 
                     <div class="form-group">
@@ -48,34 +48,37 @@
                     </thead>
 
                     <tbody>
-                        <tr v-for="productList in productLists" :key="productList.id">
-                            <td>{{ productList.id }}</td>
+                        <tr v-for="product in products" :key="products.id">
+                            <td>{{ product.id }}</td>
                             <td>
-                                <input v-model="productList.product"
-                                    v-if="productList.isEdit"
+                                <input v-model="product.name"
+                                    v-if="product.isEdit"
                                     class="form-control"
-                                    @keyup.enter="productList.isEdit = false;"
+                                    @keyup.enter="product.isEdit = false;"
                                 >
-                                <label v-else @click="productList.isEdit = true;">{{ productList.product }}</label>
+                                <label v-else @click="product.isEdit = true;">{{ product.name }}</label>
                             </td>
 
                             <td>
-                                <input v-model="productList.price"
-                                    v-if="productList.isEdit"
+                                <input v-model="product.price"
+                                    v-if="product.isEdit"
                                     class="form-control"
-                                    @keyup.enter="productList.isEdit = false;"
+                                    @keyup.enter="product.isEdit = false;"
                                 >
-                                <label v-else @click="productList.isEdit = true;">{{ productList.price }}</label>
+                                <label v-else @click="product.isEdit = true;">{{ product.price }}</label>
                             </td>
 
                             <td>
-                                <input v-model="productList.url" v-if="productList.isEdit" class="form-control"
-                                    @keyup.enter="productList.isEdit = false;">
-                                <img v-else @click="productList.isEdit = true;" :src="productList.url" width="50px" height="50px">
+                                <input v-model="product.url"
+                                    v-if="product.isEdit"
+                                    class="form-control"
+                                    @keyup.enter="product.isEdit = false;"
+                                >
+                                <img v-else @click="product.isEdit = true;" :src="product.url" width="50px" height="50px">
                             </td>
 
                             <td>
-                                <button class="btn-sm btn-danger" title="Delete Todo" @click="removeProduct(productList.id)">Delete</button>
+                                <button class="btn-sm btn-danger" title="Delete Todo" @click="removeProduct(product.id)">Delete</button>
                             </td>
                         </tr>
                     </tbody>
@@ -90,26 +93,26 @@
             el: '.products',
             data: {
                 id: '',
-                product: '',
+                name: '',
                 price: '',
                 url: '',
-                productLists: [],
+                products: [],
             },
             methods: {
                 addNewProduct() {
-                    if (this.product == '' || this.price == '' || this.url == '') {
+                    if (this.name == '' || this.price == '' || this.url == '') {
                         alert('Please fill blank field');
                     } else {
-                        this.productLists.push(
-                            { id: Math.floor(Math.random() * 10), product: this.product, price: this.price, url: this.url, isEdit: false }
+                        this.products.push(
+                            { id: Math.floor(Math.random() * 10), name: this.name, price: this.price, url: this.url, isEdit: false }
                         )
-                        this.product = '';
+                        this.name = '';
                         this.price = '';
                         this.url = '';
                     }
                 },
                 removeProduct(productId) {
-                    this.productLists = this.productLists.filter(product => product.id !== productId)
+                    this.products = this.products.filter(product => product.id !== productId)
                 }
             }
         })
