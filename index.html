@@ -5,35 +5,59 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VueJs-Products</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
 </head>
 
 <body>
-    <div class="container">
-        <div class="products">
-            <div class="col-lg-4 mb-5">
-                <h3 class="font-weight-bold mb-3">Product Lists :</h3>
+    <div class="products">
+        <div class="container">
+            <h3 class="font-weight-bold mb-3">Product Lists :</h3>
+            <div class="row">
+                <div class="col-lg-6 mb-5">
 
-                <form @submit.prevent="addNewProduct">
-                    <div class="form-group">
-                        <label class="font-weight-bold">Product:</label>
-                        <input type="text" class="form-control" placeholder="Insert Product" v-model="name" />
-                    </div>
+                    <form @submit.prevent="addNewProduct">
+                        <div class="form-group">
+                            <label class="font-weight-bold">Product:</label>
+                            <input type="text" class="form-control" placeholder="Insert Product" v-model="name" />
+                        </div>
 
-                    <div class="form-group">
-                        <label class="font-weight-bold">Price:</label>
-                        <input type="text" class="form-control" placeholder="Insert Price" v-model="price" />
-                    </div>
+                        <div class="form-group">
+                            <label class="font-weight-bold">Price:</label>
+                            <input type="text" class="form-control" placeholder="Insert Price" v-model="price" />
+                        </div>
 
-                    <div class="form-group">
-                        <label class="font-weight-bold">Image Url:</label>
-                        <input type="text" class="form-control" placeholder="Insert Image Url" v-model="url" />
-                    </div>
+                        <div class="form-group">
+                            <label class="font-weight-bold">Image Url:</label>
+                            <input type="text" class="form-control" placeholder="Insert Image Url" v-model="url" />
+                        </div>
 
-                    <div class="text-center">
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </div>
-                </form>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="col-lg-4 text-left">
+                    <h4 class="font-weight-bold">Cart Details:</h4>
+                    <ul v-for="(addToCart,index) in addToCarts" :key="addToCart.id">
+                        <li><img :src="addToCart.url" width="50px" height="50px"></li>
+                        <li>{{ addToCart.name }}</li>
+                        <li>{{ addToCart.price }}</li>
+                        <input v-model="addToCart.qty" type="number">
+                        <button class="btn btn-danger" title="Remove Cart" @click="removeItem(index)">
+                            <i class="fas fa-trash-alt text-light"></i>
+                        </button>
+                    </ul>
+                    <p>SubTotal: {{ SubTotal }}</p>
+                    <p v-show="shipping">Shipping Charge: {{ Shipping }}</p>
+                    <p v-show="netTotal">Net Total: {{ NetTotal }}</p>
+                    <p>Tax: {{ Tax }}</p>
+                    <p>Total: {{ Total }}</p>
+                    <p>Round off: {{ RoundOff }}</p>
+                    <p>Payable: {{ Payable }}</p>
+                </div>
             </div>
+
 
             <div class="col-lg-6">
                 <table class="table table-striped table-bordered">
@@ -78,7 +102,15 @@
                             </td>
 
                             <td>
-                                <button class="btn-sm btn-danger" title="Delete Todo" @click="removeProduct(product.id)">Delete</button>
+                                <button class="btn btn-danger" title="Delete Todo" @click="removeProduct(product.id)">
+                                    <i class="fas fa-trash-alt text-light"></i>
+                                </button>
+                                <button class="btn btn-primary"
+                                    title="Add To Cart"
+                                    @click="addToCart(product)"
+                                >
+                                <i class="fas fa-shopping-cart text-light"></i>
+                                </button>
                             </td>
                         </tr>
                     </tbody>
@@ -97,6 +129,89 @@
                 price: '',
                 url: '',
                 products: [],
+                addToCarts: [],
+                qty: '',
+                finalSubTotal: '',
+                finalTax: '',
+                finalRoundOff: '',
+                shipping: false,
+                finalShipping: '',
+                netTotal: false,
+                finalNetTotal: ''
+            },
+            computed: {
+                SubTotal() {
+                    let subTotal = 0;
+                    this.addToCarts.forEach(item => {
+                        subTotal += (item.price * item.qty);
+                    });
+
+                    this.finalSubTotal = subTotal;
+
+                    return subTotal.toFixed(2);
+                },
+                Shipping() {
+                    let shipping = 0
+                    if (this.finalSubTotal <= 100) {
+                        this.shipping = true;
+                        shipping = this.finalSubTotal * 4 / 100;
+                        this.finalShipping = shipping;
+
+                        return shipping.toFixed(2);
+                    } else {
+                        this.finalShipping = 0;
+                        this.shipping = false;
+                    }
+                },
+                NetTotal() {
+                    let netTotal = 0;
+                    if (this.shipping === true) {
+                        this.netTotal = true;
+                        netTotal = this.finalSubTotal + this.finalShipping;
+                        this.finalNetTotal = netTotal;
+
+                        return netTotal.toFixed(2);
+                    } else {
+                        this.finalNetTotal = 0;
+                        this.netTotal = false;
+                    }
+                },
+                Tax() {
+                    let subTotal = 0;
+                    let tax = 0;
+
+                    this.addToCarts.forEach(item => {
+                        subTotal += (item.price * item.qty);
+                    });
+
+                    if (subTotal <= 100) {
+                        tax = this.finalNetTotal * 4 / 100;
+                        this.finalTax = tax;
+                    } else {
+                        tax = subTotal * 4 / 100;
+                        this.finalTax = tax;
+                    }
+
+                    return tax.toFixed(2);
+                },
+                Total() {
+                    let total = 0;
+                    total = this.finalSubTotal + this.finalTax;
+                    return total.toFixed(2);
+                },
+                RoundOff() {
+                    let total = this.finalSubTotal + this.finalTax;
+                    let roundOffTotal = Math.round(this.finalSubTotal + this.finalTax);
+                    let roundOff = total.toFixed(2) - roundOffTotal.toFixed(2);
+
+                    this.finalRoundOff = roundOff;
+                    return roundOff.toFixed(2);
+                },
+                Payable() {
+                    var total = this.finalSubTotal + this.finalTax;
+                    let payable = total + this.finalRoundOff;
+                    return payable.toFixed(2);
+                }
             },
             methods: {
                 addNewProduct() {
@@ -104,7 +219,7 @@
                         alert('Please fill blank field');
                     } else {
                         this.products.push(
-                            { id: Math.floor(Math.random() * 10), name: this.name, price: this.price, url: this.url, isEdit: false }
+                            { id: Math.floor(Math.random() * 10), name: this.name, price: this.price, url: this.url, isEdit: false, qty: 1 }
                         )
                         this.name = '';
                         this.price = '';
@@ -113,6 +228,21 @@
                 },
                 removeProduct(productId) {
                     this.products = this.products.filter(product => product.id !== productId)
+                },
+                addToCart(product) {
+                    increaseQuantity = 1;
+                    let itemInCart = this.addToCarts.filter(item => item.id === product.id);
+
+                    let isItemInCart = itemInCart.length > 0;
+
+                    if (isItemInCart === false) {
+                        this.addToCarts.push(Vue.util.extend({},product))
+                    } else {
+                        itemInCart[0].qty += product.qty;
+                    }
+                },
+                removeItem(index) {
+                    this.addToCarts.splice(index, 1);
                 }
             }
         })
