@@ -152,6 +152,7 @@
                 qty: '',
                 finalSubTotal: '',
                 finalTax: '',
+                finalTotal: '',
                 finalRoundOff: '',
                 shipping: false,
                 finalShipping: '',
@@ -216,20 +217,26 @@
                 },
                 Total() {
                     let total = 0;
-                    total = this.finalSubTotal + this.finalTax;
+                    if (this.finalSubTotal <= 100) {
+                        total = this.finalNetTotal + this.finalTax;
+                    } else {
+                        total = this.finalSubTotal + this.finalTax;
+                    }
+
+                    this.finalTotal = total;
+
                     return total.toFixed(2);
                 },
                 RoundOff() {
-                    let total = this.finalSubTotal + this.finalTax;
-                    let roundOffTotal = Math.round(this.finalSubTotal + this.finalTax);
+                    let total = this.finalTotal;
+                    let roundOffTotal = Math.round(this.finalTotal);
                     let roundOff = total.toFixed(2) - roundOffTotal.toFixed(2);
 
                     this.finalRoundOff = roundOff;
                     return roundOff.toFixed(2);
                 },
                 Payable() {
-                    var total = this.finalSubTotal + this.finalTax;
-                    let payable = total + this.finalRoundOff;
+                    let payable = this.finalTotal + this.finalRoundOff;
                     return payable.toFixed(2);
                 }
             },
