@@ -67,6 +67,25 @@
 
                     <hr class="bg-warning">
 
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <select class="form-control">
+                                <option value="%" selected>%</option>
+                                <option value="$">$</option>
+                            </select>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <input type="text" class="form-control" placeholder="Discount">
+                        </div>
+
+                        <div class="col-lg-3">
+                            <button class="btn btn-info">Apply</button>
+                        </div>
+                    </div>
+
+                    <hr class="bg-warning">
+
                     <p>SubTotal: {{ SubTotal }}</p>
                     <p v-show="shipping">Shipping Charge: {{ Shipping }}</p>
                     <p v-show="netTotal">Net Total: {{ NetTotal }}</p>
@@ -233,10 +252,12 @@
                     let roundOff = total.toFixed(2) - roundOffTotal.toFixed(2);
 
                     this.finalRoundOff = roundOff;
+
                     return roundOff.toFixed(2);
                 },
                 Payable() {
                     let payable = this.finalTotal + this.finalRoundOff;
+
                     return payable.toFixed(2);
                 }
             },
@@ -282,7 +303,7 @@
                     } else {
                         this.noCartItem = false;
                     }
-                }
+                },
             }
         })
     </script>
