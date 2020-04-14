@@ -39,15 +39,33 @@
 
                 <div class="col-lg-4 text-left">
                     <h4 class="font-weight-bold">Cart Details:</h4>
-                    <ul v-for="(addToCart,index) in addToCarts" :key="addToCart.id">
-                        <li><img :src="addToCart.url" width="50px" height="50px"></li>
-                        <li>{{ addToCart.name }}</li>
-                        <li>{{ addToCart.price }}</li>
-                        <input v-model="addToCart.qty" type="number">
-                        <button class="btn btn-danger" title="Remove Cart" @click="removeItem(index)">
-                            <i class="fas fa-trash-alt text-light"></i>
-                        </button>
-                    </ul>
+                    <span v-for="(addToCart,index) in addToCarts" class="shadow-lg" :key="addToCart.id">
+                        <div class="row mb-3">
+                            <div class="col-lg-3">
+                                <img :src="addToCart.url" width="50px" height="50px">
+                            </div>
+
+                            <div class="col-lg-7">
+                                <span>{{ addToCart.name }}</span><br>
+                                <span>${{ addToCart.price }}</span>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-lg-4">
+                                <input v-model="addToCart.qty" class="form-control" type="number">
+                            </div>
+
+                            <div class="col-lg-4">
+                                <button class="btn btn-danger" title="Remove Cart" @click="removeItem(index)">
+                                    X
+                                </button>
+                            </div>
+                        </div>
+                    </span>
+
+                    <hr class="bg-warning">
+
                     <p>SubTotal: {{ SubTotal }}</p>
                     <p v-show="shipping">Shipping Charge: {{ Shipping }}</p>
                     <p v-show="netTotal">Net Total: {{ NetTotal }}</p>
