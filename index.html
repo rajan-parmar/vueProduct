@@ -58,7 +58,7 @@
                             </div>
 
                             <div class="col-lg-4">
-                                <button class="btn btn-danger" title="Remove Cart" @click="removeItem(index)">
+                                <button class="btn btn-danger" title="Remove Cart" @click="removeCartItem(index)">
                                     X
                                 </button>
                             </div>
@@ -276,6 +276,8 @@
                 },
                 removeProduct(productId) {
                     this.products = this.products.filter(product => product.id !== productId)
+
+                    this.addToCarts.splice(productId.length - 1, 1);
                 },
                 addToCart(product) {
                     increaseQuantity = 1;
@@ -295,7 +297,7 @@
                         this.noCartItem = false;
                     }
                 },
-                removeItem(index) {
+                removeCartItem(index) {
                     this.addToCarts.splice(index, 1);
 
                     if (this.addToCarts.length === 0) {
