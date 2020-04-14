@@ -86,13 +86,13 @@
 
                     <hr class="bg-warning">
 
-                    <p>SubTotal: {{ SubTotal }}</p>
-                    <p v-show="shipping">Shipping Charge: {{ Shipping }}</p>
-                    <p v-show="netTotal">Net Total: {{ NetTotal }}</p>
-                    <p>Tax: {{ Tax }}</p>
-                    <p>Total: {{ Total }}</p>
-                    <p>Round off: {{ RoundOff }}</p>
-                    <p>Payable: {{ Payable }}</p>
+                    <p>SubTotal: {{ subTotal }}</p>
+                    <p v-show="shippingValue">Shipping Charge: {{ shipping }}</p>
+                    <p v-show="netTotalValue">Net Total: {{ netTotal }}</p>
+                    <p>Tax: {{ tax }}</p>
+                    <p>Total: {{ total }}</p>
+                    <p>Round off: {{ roundOff }}</p>
+                    <p>Payable: {{ payable }}</p>
                 </div>
             </div>
 
@@ -173,14 +173,14 @@
                 finalTax: '',
                 finalTotal: '',
                 finalRoundOff: '',
-                shipping: false,
+                shippingValue: false,
                 finalShipping: '',
-                netTotal: false,
+                netTotalValue: false,
                 finalNetTotal: '',
                 noCartItem: true,
             },
             computed: {
-                SubTotal() {
+                subTotal() {
                     let subTotal = 0;
                     this.addToCarts.forEach(item => {
                         subTotal += (item.price * item.qty);
@@ -190,33 +190,33 @@
 
                     return subTotal.toFixed(2);
                 },
-                Shipping() {
+                shipping() {
                     let shipping = 0
                     if (this.finalSubTotal <= 100) {
-                        this.shipping = true;
+                        this.shippingValue = true;
                         shipping = this.finalSubTotal * 4 / 100;
                         this.finalShipping = shipping;
 
                         return shipping.toFixed(2);
                     } else {
                         this.finalShipping = 0;
-                        this.shipping = false;
+                        this.shippingValue = false;
                     }
                 },
-                NetTotal() {
+                netTotal() {
                     let netTotal = 0;
-                    if (this.shipping === true) {
-                        this.netTotal = true;
+                    if (this.shippingValue === true) {
+                        this.netTotalValue = true;
                         netTotal = this.finalSubTotal + this.finalShipping;
                         this.finalNetTotal = netTotal;
 
                         return netTotal.toFixed(2);
                     } else {
                         this.finalNetTotal = 0;
-                        this.netTotal = false;
+                        this.netTotalValue = false;
                     }
                 },
-                Tax() {
+                tax() {
                     let subTotal = 0;
                     let tax = 0;
 
@@ -234,7 +234,7 @@
 
                     return tax.toFixed(2);
                 },
-                Total() {
+                total() {
                     let total = 0;
                     if (this.finalSubTotal <= 100) {
                         total = this.finalNetTotal + this.finalTax;
@@ -246,7 +246,7 @@
 
                     return total.toFixed(2);
                 },
-                RoundOff() {
+                roundOff() {
                     let total = this.finalTotal;
                     let roundOffTotal = Math.round(this.finalTotal);
                     let roundOff = total.toFixed(2) - roundOffTotal.toFixed(2);
@@ -255,7 +255,7 @@
 
                     return roundOff.toFixed(2);
                 },
-                Payable() {
+                payable() {
                     let payable = this.finalTotal + this.finalRoundOff;
 
                     return payable.toFixed(2);
