@@ -38,7 +38,8 @@
                 </div>
 
                 <div class="col-lg-4 text-left">
-                    <h4 class="font-weight-bold">Cart Details:</h4>
+                    <h4 class="font-weight-bold mb-3">Cart Details:</h4>
+                    <p v-show="noCartItem" class="text-secondary">No cart item found.</p>
                     <span v-for="(addToCart,index) in addToCarts" class="shadow-lg" :key="addToCart.id">
                         <div class="row mb-3">
                             <div class="col-lg-3">
@@ -155,7 +156,8 @@
                 shipping: false,
                 finalShipping: '',
                 netTotal: false,
-                finalNetTotal: ''
+                finalNetTotal: '',
+                noCartItem: true,
             },
             computed: {
                 SubTotal() {
@@ -258,9 +260,21 @@
                     } else {
                         itemInCart[0].qty += product.qty;
                     }
+
+                    if (this.addToCarts.length === 0) {
+                        this.noCartItem = true;
+                    } else {
+                        this.noCartItem = false;
+                    }
                 },
                 removeItem(index) {
                     this.addToCarts.splice(index, 1);
+
+                    if (this.addToCarts.length === 0) {
+                        this.noCartItem = true;
+                    } else {
+                        this.noCartItem = false;
+                    }
                 }
             }
         })
