@@ -380,6 +380,10 @@
                 minusCartQuantity(addToCart) {
                     let itemInCartForMinus = this.addToCarts.filter(item => item.id === addToCart.id);
                     itemInCartForMinus[0].qty -= 1;
+
+                    if (itemInCartForMinus[0].qty === 0) {
+                        this.addToCarts.splice(0 - 1, 1);
+                    }
                 },
             }
         })
