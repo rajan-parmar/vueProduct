@@ -53,11 +53,17 @@
                         </div>
 
                         <div class="row mb-3">
-                            <div class="col-lg-4">
-                                <input v-model="addToCart.qty" class="form-control" type="number">
+                            <div class="col-lg-5">
+                                <input v-model="addToCart.qty" class="form-control" type="text" readonly>
                             </div>
 
-                            <div class="col-lg-4">
+                            <div class="col-lg-5">
+                                <button class="btn btn-secondary" title="Plus Quantity" @click="plusCartQuantity(addToCart)">
+                                    +
+                                </button>
+                                <button class="btn btn-secondary" title="Minus Quantity" @click="minusCartQuantity(addToCart)">
+                                    -
+                                </button>
                                 <button class="btn btn-danger" title="Remove Cart" @click="removeCartItem(index)">
                                     X
                                 </button>
@@ -310,7 +316,6 @@
                     this.addToCarts.splice(productId.length - 1, 1);
                 },
                 addToCart(product) {
-                    increaseQuantity = 1;
                     let itemInCart = this.addToCarts.filter(item => item.id === product.id);
 
                     let isItemInCart = itemInCart.length > 0;
@@ -335,6 +340,14 @@
                     } else {
                         this.noCartItem = false;
                     }
+                },
+                plusCartQuantity(addToCart) {
+                    let itemInCartForPlus = this.addToCarts.filter(item => item.id === addToCart.id);
+                    itemInCartForPlus[0].qty += 1;
+                },
+                minusCartQuantity(addToCart) {
+                    let itemInCartForMinus = this.addToCarts.filter(item => item.id === addToCart.id);
+                    itemInCartForMinus[0].qty -= 1;
                 },
             }
         })
