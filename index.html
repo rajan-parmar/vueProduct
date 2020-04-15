@@ -263,11 +263,13 @@
             },
             methods: {
                 addNewProduct() {
+                    let incrementValue = 0;
                     if (this.name == '' || this.price == '' || this.url == '') {
                         alert('Please fill blank field');
                     } else {
+                        incrementValue = this.products.length + 1;
                         this.products.push(
-                            { id: Math.floor(Math.random() * 10), name: this.name, price: this.price, url: this.url, isEdit: false, qty: 1 }
+                            { id: incrementValue, name: this.name, price: this.price, url: this.url, isEdit: false, qty: 1 }
                         )
                         this.name = '';
                         this.price = '';
