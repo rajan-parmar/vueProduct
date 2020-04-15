@@ -67,26 +67,29 @@
 
                     <hr class="bg-warning">
 
-                    <div class="row">
-                        <div class="col-lg-3">
-                            <select class="form-control">
-                                <option value="%" selected>%</option>
-                                <option value="$">$</option>
-                            </select>
-                        </div>
+                    <form @submit.prevent="applyDiscount">
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <select class="form-control" id="discount-type">
+                                    <option value="%" selected>%</option>
+                                    <option value="$">$</option>
+                                </select>
+                            </div>
 
-                        <div class="col-lg-6">
-                            <input type="text" class="form-control" placeholder="Discount">
-                        </div>
+                            <div class="col-lg-6">
+                                <input type="text" class="form-control" id="discount-value" placeholder="Discount">
+                            </div>
 
-                        <div class="col-lg-3">
-                            <button class="btn btn-info">Apply</button>
+                            <div class="col-lg-3">
+                                <button class="btn btn-info">Apply</button>
+                            </div>
                         </div>
-                    </div>
+                    </form>
 
                     <hr class="bg-warning">
 
                     <p>SubTotal: {{ subTotal }}</p>
+                    <p v-show="discountValue">Discount: {{ discount }}</p>
                     <p v-show="shippingValue">Shipping Charge: {{ shipping }}</p>
                     <p v-show="netTotalValue">Net Total: {{ netTotal }}</p>
                     <p>Tax: {{ tax }}</p>
@@ -178,6 +181,9 @@
                 netTotalValue: false,
                 finalNetTotal: '',
                 noCartItem: true,
+                finalDiscountType: '',
+                finalDiscountValue: '',
+                discountValue: false,
             },
             computed: {
                 subTotal() {
@@ -190,9 +196,21 @@
 
                     return subTotal.toFixed(2);
                 },
+                discount() {
+                    if (this.finalDiscountType === '$') {
+                        this.discountValue = true;
+
+                        return this.finalDiscountValue + '.00';
+                    } else if (this.finalDiscountType === '%') {
+                        this.discountValue = true;
+                        this.finalDiscountValue = this.finalSubTotal * this.finalDiscountValue / 100;
+
+                        return this.finalDiscountValue;
+                    }
+                },
                 shipping() {
                     let shipping = 0
-                    if (this.finalSubTotal <= 100) {
+                    if (this.finalSubTotal > 0 && this.finalSubTotal <= 100) {
                         this.shippingValue = true;
                         shipping = this.finalSubTotal * 4 / 100;
                         this.finalShipping = shipping;
@@ -207,7 +225,11 @@
                     let netTotal = 0;
                     if (this.shippingValue === true) {
                         this.netTotalValue = true;
-                        netTotal = this.finalSubTotal + this.finalShipping;
+                        if (this.finalDiscountValue != '') {
+                            netTotal = this.finalSubTotal + this.finalShipping - this.finalDiscountValue;
+                        } else {
+                            netTotal = this.finalSubTotal + this.finalShipping;
+                        }
                         this.finalNetTotal = netTotal;
 
                         return netTotal.toFixed(2);
@@ -262,6 +284,12 @@
                 }
             },
             methods: {
+                applyDiscount() {
+                    let type = document.getElementById('discount-type').value;
+                    let value = document.getElementById('discount-value').value;
+                    this.finalDiscountType = type;
+                    this.finalDiscountValue = value;
+                },
                 addNewProduct() {
                     let incrementValue = 0;
                     if (this.name == '' || this.price == '' || this.url == '') {
