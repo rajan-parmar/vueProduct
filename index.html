@@ -67,19 +67,19 @@
                             <td>{{ product.id }}</td>
                             <td>
                                 <input v-model="product.name" v-if="product.isEdit" class="form-control"
-                                    @keyup.enter="product.isEdit = false;">
+                                    @keyup.enter="product.isEdit = false; updateProduct(product.id, product)">
                                 <label v-else @click="product.isEdit = true;">{{ product.name }}</label>
                             </td>
 
                             <td>
                                 <input v-model="product.price" v-if="product.isEdit" class="form-control"
-                                    @keyup.enter="product.isEdit = false;">
+                                    @keyup.enter="product.isEdit = false; updateProduct(product.id, product)">
                                 <label v-else @click="product.isEdit = true;">{{ product.price }}</label>
                             </td>
 
                             <td>
                                 <input v-model="product.url" v-if="product.isEdit" class="form-control"
-                                    @keyup.enter="product.isEdit = false;">
+                                    @keyup.enter="product.isEdit = false; updateProduct(product.id, product)">
                                 <img v-else @click="product.isEdit = true;" :src="product.url" width="50px" height="50px">
                             </td>
 
@@ -337,6 +337,12 @@
                         this.url = '';
                         this.noRecords = false;
                     }
+                },
+                updateProduct(productId, product) {
+                    let productInCart = this.addToCarts.filter(item => item.id === productId);
+                    productInCart[0].name = product.name;
+                    productInCart[0].price = product.price;
+                    productInCart[0].url = product.url;
                 },
                 removeProduct(productId) {
                     this.products = this.products.filter(product => product.id !== productId)
