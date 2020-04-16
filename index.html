@@ -7,7 +7,9 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"
     >
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+
     <style>
         .cart-section, .form-section, .top-bar {
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
@@ -167,6 +169,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
     <script>
         new Vue({
             el: '.products',
@@ -206,14 +209,21 @@
                 discount() {
                     if (this.finalDiscountType === '$') {
                         if (this.finalDiscountValue > this.finalSubTotal) {
+                            alertMessage('Something went wrong', 'error');
                             return;
                         }
+
                         this.discountValue = true;
 
+                        alertMessage('Discount applied successfully', 'success');
+
                         return this.finalDiscountValue + '.00';
+
                     } else if (this.finalDiscountType === '%') {
                         this.discountValue = true;
                         this.finalDiscountValue = this.finalSubTotal * this.finalDiscountValue / 100;
+
+                        alertMessage('Discount applied successfully', 'success');
 
                         return this.finalDiscountValue;
                     }
@@ -326,12 +336,16 @@
                 addNewProduct() {
                     let incrementValue = 0;
                     if (this.name == '' || this.price == '' || this.url == '') {
-                        alert('Please fill blank field');
+                        alertMessage('Please fill blank field', 'error');
+
                     } else {
                         incrementValue = this.products.length + 1;
                         this.products.push(
                             { id: incrementValue, name: this.name, price: this.price, url: this.url, isEdit: false, qty: 1 }
                         )
+
+                        alertMessage('Product Inserted Successfully', 'success');
+
                         this.name = '';
                         this.price = '';
                         this.url = '';
@@ -343,6 +357,7 @@
                     productInCart[0].name = product.name;
                     productInCart[0].price = product.price;
                     productInCart[0].url = product.url;
+                    alertMessage('Product Updated Successfully', 'success');
                 },
                 removeProduct(productId) {
                     this.products = this.products.filter(product => product.id !== productId)
@@ -360,8 +375,10 @@
 
                     if (isItemInCart === false) {
                         this.addToCarts.push(Vue.util.extend({},product))
+                        alertMessage('Item Added to the cart successfully', 'success');
                     } else {
                         itemInCart[0].qty += product.qty;
+                        alertMessage('Item Added to the cart successfully', 'success');
                     }
 
                     if (this.addToCarts.length === 0) {
@@ -378,10 +395,12 @@
                     } else {
                         this.noCartItem = false;
                     }
+                    alertMessage('Item removed from the cart successfully', 'success');
                 },
                 plusCartQuantity(addToCart) {
                     let itemInCartForPlus = this.addToCarts.filter(item => item.id === addToCart.id);
                     itemInCartForPlus[0].qty += 1;
+                    alertMessage('Cart item updated successfully', 'success');
                 },
                 minusCartQuantity(addToCart) {
                     let itemInCartForMinus = this.addToCarts.filter(item => item.id === addToCart.id);
@@ -390,9 +409,15 @@
                     if (itemInCartForMinus[0].qty === 0) {
                         this.addToCarts.splice(0 - 1, 1);
                     }
+                    alertMessage('Cart item updated successfully', 'success');
                 },
             }
         })
+
+        function alertMessage(message, alertType) {
+            alertify.set('notifier','position', 'bottom-left');
+            alertify[alertType](message);
+        }
     </script>
 </body>
 </html>
