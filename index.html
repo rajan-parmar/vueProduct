@@ -76,7 +76,7 @@
                             <td>
                                 <input v-model="product.price" v-if="product.isEdit" class="form-control"
                                     @keyup.enter="product.isEdit = false; updateProduct(product.id, product)">
-                                <label v-else @click="product.isEdit = true;">{{ product.price }}</label>
+                                <label v-else @click="product.isEdit = true;">${{ product.price }}</label>
                             </td>
 
                             <td>
@@ -204,7 +204,7 @@
 
                     this.finalSubTotal = subTotal;
 
-                    return subTotal.toFixed(2);
+                    return '$' + subTotal.toFixed(2);
                 },
                 discount() {
                     if (this.finalDiscountType === '$') {
@@ -217,7 +217,7 @@
 
                         alertMessage('Discount applied successfully', 'success');
 
-                        return this.finalDiscountValue + '.00';
+                        return '$' + this.finalDiscountValue + '.00';
 
                     } else if (this.finalDiscountType === '%') {
                         this.discountValue = true;
@@ -225,7 +225,7 @@
 
                         alertMessage('Discount applied successfully', 'success');
 
-                        return this.finalDiscountValue;
+                        return '$' + this.finalDiscountValue;
                     }
                 },
                 shipping() {
@@ -235,7 +235,7 @@
                         shipping = this.finalSubTotal * 4 / 100;
                         this.finalShipping = shipping;
 
-                        return shipping.toFixed(2);
+                        return '$' + shipping.toFixed(2);
                     } else {
                         this.finalShipping = 0;
                         this.shippingValue = false;
@@ -257,7 +257,7 @@
                         }
                         this.finalNetTotal = netTotal;
 
-                        return netTotal.toFixed(2);
+                        return '$' + netTotal.toFixed(2);
                     } else {
                         this.finalNetTotal = 0;
                         this.netTotalValue = false;
@@ -283,7 +283,7 @@
                         this.finalTax = tax;
                     }
 
-                    return tax.toFixed(2);
+                    return '$' + tax.toFixed(2);
                 },
                 total() {
                     let total = 0;
@@ -300,7 +300,7 @@
 
                     this.finalTotal = total;
 
-                    return total.toFixed(2);
+                    return '$' + total.toFixed(2);
                 },
                 roundOff() {
                     let total = this.finalTotal;
@@ -314,7 +314,7 @@
 
                     this.finalRoundOff = roundOff;
 
-                    return roundOff.toFixed(2);
+                    return '$' + roundOff.toFixed(2);
                 },
                 payable() {
                     if (this.finalDiscountValue > this.finalSubTotal) {
@@ -323,7 +323,7 @@
 
                     let payable = this.finalTotal + this.finalRoundOff;
 
-                    return payable.toFixed(2);
+                    return '$' + payable.toFixed(2);
                 }
             },
             methods: {
