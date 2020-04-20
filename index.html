@@ -18,7 +18,6 @@
         }
     </style>
 </head>
-
 <body>
     <div class="top-bar text-left">
         <h2 class="ml-5 mt-3">VueJs Cart Manager</h2>
@@ -85,7 +84,6 @@
                         this.name = '';
                         this.price = '';
                         this.url = '';
-                        this.noRecords = false;
                     }
                 },
             }
@@ -152,7 +150,6 @@
             `,
             data() {
                 return {
-                    noRecords: true,
                     addToCarts:[],
                 }
             },
@@ -169,12 +166,6 @@
                         itemInCart[0].qty += product.qty;
                         alertMessage('Item Added to the cart successfully', 'success');
                     }
-
-                    if (this.addToCarts.length === 0) {
-                        this.noCartItem = true;
-                    } else {
-                        this.noCartItem = false;
-                    }
                 },
                 updateProduct(productId, product) {
                     let productInCart = this.addToCarts.filter(item => item.id === productId);
@@ -185,10 +176,6 @@
                 },
                 removeProduct(productId) {
                     this.products = this.products.filter(product => product.id !== productId)
-
-                    if (this.products.length === 0) {
-                        this.noRecords = true;
-                    }
 
                     this.addToCarts.splice(productId.length - 1, 1);
                 },
@@ -283,7 +270,6 @@
                     finalDiscountType: '',
                     finalDiscountValue: '',
                     discountValue: false,
-                    noCartItem: true,
                 }
             },
              computed: {
@@ -431,11 +417,6 @@
                 removeCartItem(index) {
                     this.addToCarts.splice(index, 1);
 
-                    if (this.addToCarts.length === 0) {
-                        this.noCartItem = true;
-                    } else {
-                        this.noCartItem = false;
-                    }
                     alertMessage('Item removed from the cart successfully', 'success');
                 },
                 plusCartQuantity(addToCart) {
@@ -457,10 +438,8 @@
         new Vue({
             el: '.productsCart',
             data: {
-                id: '',
                 products: [],
                 addToCarts: [],
-                qty: '',
             },
         })
 
