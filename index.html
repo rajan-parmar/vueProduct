@@ -56,7 +56,7 @@
                             </div>
                         </form>
                     </div>
-                    <product-details :products="products"></product-details>
+                    <product-details :products="products" @remove-product="removeProductUpdate"></product-details>
                 </div>
             `,
             data() {
@@ -86,6 +86,10 @@
                         this.url = '';
                     }
                 },
+                removeProductUpdate(productId) {
+                    this.products = this.products.filter(product => product.id !== productId);
+                    alertMessage('Product removed successfully', 'success');
+                }
             }
         })
 
@@ -175,9 +179,9 @@
                     alertMessage('Product Updated Successfully', 'success');
                 },
                 removeProduct(productId) {
-                    this.products = this.products.filter(product => product.id !== productId)
+                    this.$emit("remove-product", productId);
 
-                    this.addToCarts.splice(productId.length - 1, 1);
+                    this.addToCarts = this.addToCarts.filter(cart => cart.id !== productId);
                 },
             }
         })
