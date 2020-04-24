@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+<body>
+    <div class="app">
+        <product></product>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+        Vue.component('product', {
+            template: `
+                <div class="row">
+                    <div class="col-lg-3">
+                        <h3 class="font-weight-bold mb-3">Product Form :</h3>
+
+                            <div class="form-group">
+                                <label class="font-weight-bold">Name:</label>
+                                <input type="text" class="form-control" placeholder="Insert Name" />
+                            </div>
+
+                            <div class="form-group">
+                                <label class="font-weight-bold">Price:</label>
+                                <input type="number" class="form-control" placeholder="Insert Price" />
+                            </div>
+
+                            <div class="form-group">
+                                <label class="font-weight-bold">Image Url:</label>
+                                <input type="text" class="form-control" placeholder="Insert Image Url"/>
+                            </div>
+
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                    <product-details></product-details>
+                </div>
+            `,
+        })
+
+        Vue.component('product-details', {
+            template: `
+                <div class="row">
+                    <div class="col-lg-6">
+                        <table class="table table-striped table-bordered">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Price</th>
+                                    <th>Name Image</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                    <product-cart></product-cart>
+                </div>
+            `,
+        })
+
+        Vue.component('product-cart', {
+            template: `
+                <div class="col-lg-6 cart-section">
+                    <p>SubTotal:</p>
+                    <p>Discount:</p>
+                    <p>Shipping Charge:</p>
+                    <p>Net Total:</p>
+                    <p>Tax:</p>
+                    <p>Total:</p>
+                    <p>Round off:</p>
+                    <p>Payable:</p>
+                </div>
+            `,
+        })
+        new Vue({
+            el: '.app',
+            data: {
+            },
+        })
+    </script>
+</body>
+</html>
