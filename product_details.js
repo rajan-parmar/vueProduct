@@ -22,7 +22,7 @@ Vue.component('product-details', {
 
                     <tbody>
                         <tr v-if="!products.length"><td colspan="5" class="text-center">No Records</td></tr>
-                        <tr v-for="product in products" :key="products.id">
+                        <tr v-for="product in products" :key="product.id">
                             <td>{{ product.id }}</td>
                             <td>
                                 <input v-model="product.name" v-if="product.isEdit" class="form-control"
@@ -78,9 +78,12 @@ Vue.component('product-details', {
         },
         updateProduct(productId, product) {
             let productInCart = this.addToCarts.filter(item => item.id === productId);
-            productInCart[0].name = product.name;
-            productInCart[0].price = product.price;
-            productInCart[0].url = product.url;
+            if (this.addToCarts.length > 0) {
+                productInCart[0].name = product.name;
+                productInCart[0].price = product.price;
+                productInCart[0].url = product.url;
+            }
+
             alertMessage('Product Updated Successfully', 'success');
         },
         removeProduct(productId) {
