@@ -43,7 +43,7 @@ Vue.component('product-details', {
                             </td>
 
                             <td>
-                                <button class="btn btn-danger" title="Delete Todo" @click="removeProduct(product.id)">
+                                <button class="btn btn-danger mr-2" title="Delete Todo" @click="removeProduct(product.id)">
                                     <i class="fas fa-trash-alt text-light"></i>
                                 </button>
                                 <button class="btn btn-primary" title="Add To Cart" @click="addToCart(product)">
@@ -78,6 +78,11 @@ Vue.component('product-details', {
         },
         updateProduct(productId, product) {
             let productInCart = this.addToCarts.filter(item => item.id === productId);
+            
+            if (productInCart.length === 0) {
+                return;
+            }
+
             if (this.addToCarts.length > 0) {
                 productInCart[0].name = product.name;
                 productInCart[0].price = product.price;

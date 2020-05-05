@@ -27,10 +27,10 @@ Vue.component('product-cart', {
                     </div>
 
                     <div class="col-lg-5">
-                        <button class="btn btn-secondary" title="Plus Quantity" @click="plusCartQuantity(addToCart)">
+                        <button class="btn btn-secondary mr-1" title="Plus Quantity" @click="plusCartQuantity(addToCart)">
                             +
                         </button>
-                        <button class="btn btn-secondary" title="Minus Quantity" @click="minusCartQuantity(addToCart)">
+                        <button class="btn btn-secondary mr-1" title="Minus Quantity" @click="minusCartQuantity(addToCart)">
                             -
                         </button>
                         <button class="btn btn-danger" title="Remove Cart" @click="removeCartItem(index)">
